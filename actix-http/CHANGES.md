@@ -1,7 +1,14 @@
 # Changes
 
 ## Unreleased - 2021-xx-xx
+### Added
+* `body::EitherBody` enum. [#????]
+
+### Changed
 * Rename `body::BoxBody::{from_body => new}`. [#????]
+
+### Removed
+* Remove unnecessary `MessageBody` bound on types passed to `body::AnyBody::new`. [#????]
 
 [#????]: https://github.com/actix/actix-web/pull/????
 
