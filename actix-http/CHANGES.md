@@ -1,6 +1,9 @@
 # Changes
 
 ## Unreleased - 2021-xx-xx
+* Rename `body::BoxBody::{from_body => new}`. [#????]
+
+[#????]: https://github.com/actix/actix-web/pull/????
 
 
 ## 3.0.0-beta.14 - 2021-11-30
