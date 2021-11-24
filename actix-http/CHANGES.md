@@ -2,6 +2,7 @@
 
 ## Unreleased - 2021-xx-xx
 ### Added
+* `Response::into_boxed_body`. [#????]
 * `body::EitherBody` enum. [#????]
 
 ### Changed
