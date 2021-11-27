@@ -2,11 +2,14 @@
 
 ## Unreleased - 2021-xx-xx
 ### Added
-* `Response::into_boxed_body`. [#????]
+* `Response::map_into_boxed_body`. [#????]
 * `body::EitherBody` enum. [#????]
+* `body::None` struct. [#????]
+* `impl Clone for ws::HandshakeError`. [#????]
 
 ### Changed
 * Rename `body::BoxBody::{from_body => new}`. [#????]
+* Body type for `Responses` returned from `Response::{new, ok, etc...}` is now `BoxBody`. [#????]
 
 ### Removed
 * Remove unnecessary `MessageBody` bound on types passed to `body::AnyBody::new`. [#????]
