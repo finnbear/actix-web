@@ -51,7 +51,7 @@ where
 {
     pub(crate) fn new(
         flow: Rc<HttpFlow<S, X, U>>,
-        mut connection: Connection<T, Bytes>,
+        mut conn: Connection<T, Bytes>,
         on_connect_data: OnConnectData,
         config: ServiceConfig,
         peer_addr: Option<net::SocketAddr>,
@@ -59,14 +59,14 @@ where
         let ping_pong = config.keep_alive_timer().map(|timer| H2PingPong {
             timer: Box::pin(timer),
             on_flight: false,
-            ping_pong: connection.ping_pong().unwrap(),
+            ping_pong: conn.ping_pong().unwrap(),
         });
 
         Self {
             flow,
             config,
             peer_addr,
-            connection,
+            connection: conn,
             on_connect_data,
             ping_pong,
             _phantom: PhantomData,
