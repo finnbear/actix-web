@@ -1,5 +1,4 @@
 use std::{
-    error::Error as StdError,
     future::Future,
     marker::PhantomData,
     net,
@@ -46,7 +45,6 @@ where
     <S::Service as Service<Request>>::Future: 'static,
 
     B: MessageBody + 'static,
-    B::Error: Into<Box<dyn StdError>>,
 {
     /// Create new `H2Service` instance with config.
     pub(crate) fn with_config<F: IntoServiceFactory<S, Request>>(
@@ -77,7 +75,6 @@ where
     <S::Service as Service<Request>>::Future: 'static,
 
     B: MessageBody + 'static,
-    B::Error: Into<Box<dyn StdError>>,
 {
     /// Create plain TCP based service
     pub fn tcp(
@@ -121,7 +118,6 @@ mod openssl {
         <S::Service as Service<Request>>::Future: 'static,
 
         B: MessageBody + 'static,
-        B::Error: Into<Box<dyn StdError>>,
     {
         /// Create OpenSSL based service.
         pub fn openssl(
@@ -169,7 +165,6 @@ mod rustls {
         <S::Service as Service<Request>>::Future: 'static,
 
         B: MessageBody + 'static,
-        B::Error: Into<Box<dyn StdError>>,
     {
         /// Create Rustls based service.
         pub fn rustls(
@@ -211,7 +206,6 @@ where
     <S::Service as Service<Request>>::Future: 'static,
 
     B: MessageBody + 'static,
-    B::Error: Into<Box<dyn StdError>>,
 {
     type Response = ();
     type Error = DispatchError;
@@ -273,7 +267,6 @@ where
     S::Future: 'static,
     S::Response: Into<Response<B>> + 'static,
     B: MessageBody + 'static,
-    B::Error: Into<Box<dyn StdError>>,
 {
     type Response = ();
     type Error = DispatchError;
@@ -338,7 +331,6 @@ where
     S::Future: 'static,
     S::Response: Into<Response<B>> + 'static,
     B: MessageBody,
-    B::Error: Into<Box<dyn StdError>>,
 {
     type Output = Result<(), DispatchError>;
 

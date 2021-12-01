@@ -90,7 +90,6 @@ where
     S::Response: Into<Response<B>>,
 
     B: MessageBody,
-    B::Error: Into<Box<dyn StdError>>,
 {
     type Output = Result<(), crate::error::DispatchError>;
 
@@ -200,7 +199,6 @@ async fn handle_response<B>(
 ) -> Result<(), DispatchError>
 where
     B: MessageBody,
-    B::Error: Into<Box<dyn StdError>>,
 {
     let (res, body) = res.replace_body(());
 

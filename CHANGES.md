@@ -2,9 +2,9 @@
 
 ## Unreleased - 2021-xx-xx
 ### Added
-* `HttpResponse::map_into_boxed_body`. [#????]
+* `HttpResponse::map_into_boxed_body`. [#2468]
 
-[#????]: https://github.com/actix/actix-web/pull/????
+[#2468]: https://github.com/actix/actix-web/pull/2468
 
 
 ## 4.0.0-beta.13 - 2021-11-30
