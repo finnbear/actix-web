@@ -294,6 +294,8 @@ where
         let on_connect_data =
             OnConnectData::from_io(&io, self.on_connect_ext.as_deref());
 
+        println!("H2START");
+
         H2ServiceHandlerResponse {
             state: State::Handshake(
                 Some(self.flow.clone()),
@@ -356,6 +358,7 @@ where
                 ref mut handshake,
             ) => match ready!(Pin::new(handshake).poll(cx)) {
                 Ok(Ok(conn)) => {
+                    println!("H2OK");
                     let on_connect_data = std::mem::take(on_connect_data);
                     self.state = State::Incoming(Dispatcher::new(
                         srv.take().unwrap(),
@@ -367,6 +370,7 @@ where
                     self.poll(cx)
                 }
                 Ok(Err(err)) => {
+                    println!("H2ERR");
                     trace!("H2 handshake error: {}", err);
                     Poll::Ready(Err(err.into()))
                 }
