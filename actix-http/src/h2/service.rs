@@ -29,6 +29,9 @@ use crate::{
 };
 
 use super::dispatcher::Dispatcher;
+use actix_rt::time::{timeout, Timeout};
+use h2::Reason;
+use std::time::Duration;
 
 /// `ServiceFactory` implementation for HTTP/2 transport
 pub struct H2Service<T, S, B> {
@@ -297,7 +300,7 @@ where
                 Some(self.cfg.clone()),
                 addr,
                 on_connect_data,
-                h2_handshake(io),
+                Box::pin(timeout(Duration::from_secs(30), h2_handshake(io))),
             ),
         }
     }
@@ -314,7 +317,7 @@ where
         Option<ServiceConfig>,
         Option<net::SocketAddr>,
         OnConnectData,
-        H2Handshake<T, Bytes>,
+        Pin<Box<Timeout<H2Handshake<T, Bytes>>>>,
     ),
 }
 
@@ -352,7 +355,7 @@ where
                 ref mut on_connect_data,
                 ref mut handshake,
             ) => match ready!(Pin::new(handshake).poll(cx)) {
-                Ok(conn) => {
+                Ok(Ok(conn)) => {
                     let on_connect_data = std::mem::take(on_connect_data);
                     self.state = State::Incoming(Dispatcher::new(
                         srv.take().unwrap(),
@@ -363,9 +366,12 @@ where
                     ));
                     self.poll(cx)
                 }
-                Err(err) => {
+                Ok(Err(err)) => {
                     trace!("H2 handshake error: {}", err);
                     Poll::Ready(Err(err.into()))
+                }
+                Err(_timeout) => {
+                    Poll::Ready(Err(DispatchError::H2(Reason::PROTOCOL_ERROR.into())))
                 }
             },
         }
