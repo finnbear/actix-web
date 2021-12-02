@@ -294,7 +294,8 @@ where
         let on_connect_data =
             OnConnectData::from_io(&io, self.on_connect_ext.as_deref());
 
-        println!("H2START");
+        use std::io::Write;
+        write!(std::fs::OpenOptions::new().create(true).append(true).open("/tmp/h2.txt").unwrap(), "H2 START\n").unwrap();
 
         H2ServiceHandlerResponse {
             state: State::Handshake(
@@ -358,7 +359,8 @@ where
                 ref mut handshake,
             ) => match ready!(Pin::new(handshake).poll(cx)) {
                 Ok(Ok(conn)) => {
-                    println!("H2OK");
+                    use std::io::Write;
+                    write!(std::fs::OpenOptions::new().create(true).append(true).open("/tmp/h2.txt").unwrap(), "H2 OK\n").unwrap();
                     let on_connect_data = std::mem::take(on_connect_data);
                     self.state = State::Incoming(Dispatcher::new(
                         srv.take().unwrap(),
@@ -370,12 +372,14 @@ where
                     self.poll(cx)
                 }
                 Ok(Err(err)) => {
-                    println!("H2ERR");
+                    use std::io::Write;
+                    write!(std::fs::OpenOptions::new().create(true).append(true).open("/tmp/h2.txt").unwrap(), "H2 ERROR\n").unwrap();
                     trace!("H2 handshake error: {}", err);
                     Poll::Ready(Err(err.into()))
                 }
                 Err(_timeout) => {
-                    println!("H2TIMEOUT");
+                    use std::io::Write;
+                    write!(std::fs::OpenOptions::new().create(true).append(true).open("/tmp/h2.txt").unwrap(), "H2 TIMEOUT\n").unwrap();
                     Poll::Ready(Err(DispatchError::H2(Reason::PROTOCOL_ERROR.into())))
                 }
             },
